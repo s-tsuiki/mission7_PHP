@@ -75,7 +75,7 @@ require '../tools/database_connect/database_connect.php';
 	
 			$stmt = $pdo->query($sql);
 
-			//本登録用のmemberテーブルにすでに登録されているuserかどうかをチェックする
+			//本登録用のusr_listテーブルにすでに登録されているuserかどうかをチェックする
 			$stmt = $pdo->prepare("SELECT mail FROM usr_list WHERE user=(:user) AND flag =1");
 			$stmt->bindValue(':user', $user, PDO::PARAM_STR);
 			$stmt->execute();

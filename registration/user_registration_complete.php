@@ -43,7 +43,7 @@ require '../phpmailer/send_complete_mail.php';
 		//トランザクション開始
 		$pdo->beginTransaction();
 	
-		//memberテーブルに本登録する
+		//usr_listテーブルに本登録する
 		$stmt = $pdo->prepare("INSERT INTO usr_list (user,mail,password) VALUES (:user,:mail,:password_hash)");
 		//プレースホルダへ実際の値を設定する
 		$stmt->bindValue(':user', $user, PDO::PARAM_STR);
@@ -51,7 +51,7 @@ require '../phpmailer/send_complete_mail.php';
 		$stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
 		$stmt->execute();
 		
-		//pre_memberのflagを1にする
+		//pre_usr_listのflagを1にする
 		$stmt = $pdo->prepare("UPDATE pre_usr_list SET flag=1 WHERE mail=(:mail)");
 		//プレースホルダへ実際の値を設定する
 		$stmt->bindValue(':mail', $mail, PDO::PARAM_STR);

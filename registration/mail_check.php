@@ -73,7 +73,7 @@ require '../tools/database_connect/database_connect.php';
 	
 				$stmt = $pdo->query($sql);
 				
-				//本登録用のmemberテーブルにすでに登録されているmailかどうかをチェックする
+				//本登録用のusr_listテーブルにすでに登録されているmailかどうかをチェックする
 				$stmt = $pdo->prepare("SELECT mail FROM usr_list WHERE mail=(:mail) AND flag =1");
 				$stmt->bindValue(':mail', $mail, PDO::PARAM_STR);
 				$stmt->execute();
@@ -89,7 +89,7 @@ require '../tools/database_connect/database_connect.php';
 	
 		$urltoken = hash('sha256',uniqid(rand(),1));
 		//*****.comの部分は、このページが置いてあるURLと同じ
-		$url = "https://*****.com/registration/user_registration.php"."?urltoken=".$urltoken;
+		$url = "https://*****.com/mission7_PHP/registration/user_registration.php"."?urltoken=".$urltoken;
 		
 		//ここでデータベースに登録する
 		try{
