@@ -2,9 +2,9 @@
 	//下の1行は、データベースに接続する際に必須です。ファイルの場所によって、パスを適宜書き換えてください。
 	require '../tools/database_connect/database_connect.php';
 	//データベースへの接続
-	$dsn='mysql:dbname=tb210344db;host=localhost';
-	$user = 'tb-210344';
-	$password = 'reGMB4pfZa';
+	$dsn='';
+	$user = '';
+	$password = '';
 	$pdo = new PDO($dsn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));	
 	
 	//テーブル作成
