@@ -25,6 +25,7 @@ $username = "RIN";
 .logo{
 	width: 300px;
 	box-shadow: 1px;
+	margin-left: 30px;
 }
 .genre{
 	position: relative;
@@ -32,8 +33,18 @@ $username = "RIN";
 	height: 50px;
 	font-size: 20px;
 }
-.p{
-	font-size: 20px;
+.link{
+	float: right;
+	position: absolute;
+	top: 150px;
+	right: 50px;
+}
+p{
+	font-size: 30px;
+	margin-left: 30px;
+}
+span{
+	margin-left: 30px;
 }
 .panel{
 	margin-left: 20px;
@@ -60,96 +71,24 @@ $username = "RIN";
 .pic{
 	height: 250px;
 	width: 230px;
+	overflow: hidden;
 }
 .pic img{
     width: 100%;
     display: block;
 
 </style>
-<!--
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script>
-	$(document).ready(function(){
-		$(".pic").on("load",function(){
-			var iw,ih;
-			var cw=250;
-			var ch=250;
-			iw=($(this).width()-cw)/2;
-			ih=($(this).height()-ch)/2;
-			$(this).css("top","-"+ih+"px");
-			$(this).css("left","-"+iw+"px");
-		});
-			});
-</script>
-<script type="text/javascript">
-	window.onload=function(){
-        changeImgSize();
-    }
-    function changeImgSize(){
-        var getContainer=document.getElementById('pic');//父元素div
-        var getIMG=getContainer.getElementsByTagName('img')[0];
-        var fw=getContainer.offsetWidth-(2*getContainer.clientLeft);
-        var fh=getContainer.offsetHeight-(2*getContainer.clientTop);
-        var iw=getIMG.width;
-        var ih=getIMG.height;
-        var m=iw/fw;//图片与父元素宽度比
-        var n=ih/fh;//图片与父元素高度比
-        if(m>=1&&n<=1)//图片比父元素宽 或者图片比父元素短
-        {
 
-            iw=Math.ceil(iw/n);
-            ih=Math.ceil(ih/n);
-            getIMG.width=iw;
-            getIMG.height=ih;
-        }
-        else if(m<=1&&n>=1)//图片比父元素窄 或者图片比父元素高
-        {
-            iw=Math.ceil(iw/m);
-            ih=Math.ceil(ih/m);
-            getIMG.width=iw;
-            getIMG.height=ih;
-        }
-        else if(m>=1&&n>=1)
-        {
-
-            getMAX=Math.min(m,n);
-            iw=Math.ceil(iw/getMAX);
-            ih=Math.ceil(ih/getMAX);
-            getIMG.width=iw;
-            getIMG.height=ih;
-        }
-
-        var getDistance;
-        var getDistance2;
-        if(fh>getIMG.height){
-            getDistance=Math.floor((fh-getIMG.height)/2);
-            getIMG.style.marginTop=getDistance.toString()+"px";
-        }else {
-            getDistance=Math.floor((getIMG.height-fh)/2);
-            getIMG.style.marginTop="-"+getDistance.toString()+"px";
-        }
-
-        if(fw>getIMG.width){
-            getDistance2=Math.floor((fw-getIMG.width)/2);
-            getIMG.style.marginLeft=getDistance2.toString()+"px";
-        }else {
-            getDistance2=Math.floor((getIMG.width-fw)/2);
-            getIMG.style.marginLeft="-"+getDistance2.toString()+"px";
-        }
-
-    }
-
-</script>
--->
 </head>
 <body>
 <div class="headline">
-<img src="images/logo.jpg" class="logo"><p class="title"><?php echo $username."のページ";?></p>
+<img src="images/logo.jpg" class="logo"><p class="title"><?php echo $username."のページ";?></p><a href="toppage.php" class="link">トップページへ</a>
 </div>
 <p>投稿一覧</p>
 
 <form id="submit_form" action="userpage.php" method="POST">
-ジャンル：<select name="toukou" id="submit_select" onchange="submit(this.form)">
+<span>ジャンル：</span>
+<select name="toukou" id="submit_select" onchange="submit(this.form)">
 <option value="選択してください">選択してください</option>
 <option value="全て">全て</option>
 <option value="食べ物">食べ物</option>
