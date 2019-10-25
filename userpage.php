@@ -1,8 +1,7 @@
 <?php
-//トップページから、ユーザー名を変数としてpostする
-//$user = $_POST['user'];
-//今は値を設定している
-$username = "RIN";
+
+$username = $_POST['username'];
+
 ?>
 <html>
 <head>
@@ -87,6 +86,7 @@ span{
 <p>投稿一覧</p>
 
 <form id="submit_form" action="userpage.php" method="POST">
+<input type="hidden" name="username" value="<?php echo $username; ?>">
 <span>ジャンル：</span>
 <select name="toukou" id="submit_select" onchange="submit(this.form)">
 <option value="選択してください">選択してください</option>
@@ -114,8 +114,8 @@ span{
 </script>
 <?php
 $dsn = 'mysql:dbname=tb210282db; host=localhost';
-$user = '';
-$password = '';
+$user = 'tb-210282';
+$password = 'BGHZyT7Gvh';
 $pdo = new PDO($dsn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
 
 
@@ -130,7 +130,7 @@ if(empty($_POST["toukou"])){
 	$filename = $row['filename'];
 	$genre = $row['genre'];
 	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' class='cut'></div>";
+    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
     echo $comment."<br>by. ".$username."jungle".$genre."</div>";
 
 }
