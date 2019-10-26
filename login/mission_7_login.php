@@ -46,7 +46,7 @@
             </fieldset>
         </form>
         <br>
-        <form action="mission_7_SignUp.php">
+        <form action="../registration/mail_registration.php">
             <fieldset>          
                 <legend>新規登録フォーム</legend>
                 <input type="submit" value="新規登録">
