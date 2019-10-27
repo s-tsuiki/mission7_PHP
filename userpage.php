@@ -113,10 +113,8 @@ span{
  });
 </script>
 <?php
-$dsn = 'mysql:dbname=tb210282db; host=localhost';
-$user = 'tb-210282';
-$password = 'BGHZyT7Gvh';
-$pdo = new PDO($dsn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+ require 'tools/database_connect/database_connect.php';
+ $pdo = db_connect();
 
 
 if(empty($_POST["toukou"])){
