@@ -13,7 +13,7 @@ require '../tools/database_connect/database_connect.php';
 
 	//POST送信されていなかった場合
 	if(empty($_POST)){
-		header('Location: admin_top.php');
+		header('Location: admin_login.php');
 		exit();
 	}
 

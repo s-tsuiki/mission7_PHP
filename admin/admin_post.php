@@ -45,6 +45,11 @@ require '../tools/database_connect/database_connect.php';
 	$user = $_SESSION['admin_user'];
 	$case = 1;
 
+	//<br>を改行コードに変換
+	function br2nl($string) {
+		return preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/i', "", $string);
+	}
+
 	//編集ボタンを押したとき
 	if(isset($_POST['edit_number'])){
 		$case = 2;
@@ -71,7 +76,9 @@ require '../tools/database_connect/database_connect.php';
 						//名前とコメントを取得
 						$user = $row['user'];
 						$comment = $row['comment'];
+						$comment = br2nl($comment);	//<br>を改行コードに変換
 						$filename = $row['filename'];
+						$genre = $row['genre'];
 						//$is_correct = 1;
 					}/*elseif($row['id'] === $id){
 						$is_correct = 2;
@@ -119,6 +126,7 @@ require '../tools/database_connect/database_connect.php';
   <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
   <link rel="stylesheet" type="text/css" href="../layout/admin_post.css">
   <title><?=htmlspecialchars($user, ENT_QUOTES, 'UTF-8')?>さんの投稿・編集ページ</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 <body>
 <div class = "form">
@@ -126,14 +134,26 @@ require '../tools/database_connect/database_connect.php';
 <p>コメントを入力してください。</p>
 <p>管理者権限で新規投稿、またはすべてのユーザーの投稿の編集ができます。</p>
 <p>アップロードする画像や動画の容量は、<strong>2MBまで</strong>です。</p>
+<p>投稿できるファイル形式は、「.jpg」、「.png」、「.jpeg」、「.gif」、「.mp4」の5つです。</p>
 <form method = "post" action = "admin_mypage.php" enctype="multipart/form-data">
  <input type = "hidden" name = "user" value = <?php if(!empty($user)){echo "'$user'";}?> >
  <div class = "item">
    <lavel for="upfile">画像や動画:</lavel><br>
-   <?php if(!empty($num)){echo "<img src='../upload/".$filename."'>"."<br>";}?>
+   <?php 
+	if(!empty($num)){
+		$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+		$imgext = ['jpg','png','jpeg','gif'];
+		if(in_array($ext,$imgext)){
+			echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+    		}else{
+			echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+		}
+		//echo "<img src='../upload/".$filename."'>"."<br>";
+	}
+   ?>
    <input type='file' name='upfile' style = 'margin: 30px; height: 30px; width: 300px'><br>
    <lavel for="genre">ジャンル：</lavel>
-   <select name="genre">
+   <select name="genre" id="genre">
      <option value="食べ物">食べ物</option>
      <option value="芸能人">芸能人</option>
      <option value="ネット有名人">ネット有名人</option>
@@ -145,6 +165,13 @@ require '../tools/database_connect/database_connect.php';
      <option value="機械">機械</option>
      <option value="その他">その他</option>
    </select><br>
+   <script type="text/javascript">
+     var genre = <?php if(!empty($genre)){echo $genre;}?>;
+     document.write(genre);
+     if(!genre){
+       document.getElementById('genre').value = genre;
+     }
+   </script>
    <lavel for="comment">コメント:</lavel><br>
    <textarea name="comment" cols="40" rows="5"><?php if(!empty($comment)){echo htmlspecialchars($comment, ENT_QUOTES, 'UTF-8');}?></textarea>
  </div>

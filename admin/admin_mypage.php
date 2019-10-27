@@ -87,34 +87,49 @@ require '../tools/database_connect/database_connect.php';
 				//画像・動画投稿
 				if(!empty($_FILES['upfile'])){
     					$upfile = $_FILES['upfile'];
-    					function upload_file($files, $path = "../upload",$imagesExt=['jpg','png','jpeg','gif','mp4']) {
+    					$path = "../upload";
+					$imagesExt=['jpg','png','jpeg','gif','mp4'];
+					$upfile_name = "";
     
-    						//エラーかどうか
-    						if ($files['error'] == 00) {
-        						$ext = strtolower(pathinfo($files['name'],PATHINFO_EXTENSION));
-        						//拡張子判定
-        						if (!in_array($ext,$imagesExt)){
-            							return "対応するファイル形式にしてください。";
-        						}
-        						//パスがあるか
-        						if (!is_dir($path)){
-            							mkdir($path,0777,true);  
-        						}
-        						$filename = md5(uniqid(microtime(true),true)).'.'.$ext; //ユニークidをつける
-        						$destname = $path."/".$filename; //
-        						// アップロード成功か
-        						if (!move_uploaded_file($files['tmp_name'],$destname)){
-            							return "アップロード失敗しました";
-        						}
-        						else{
-								return $filename;
-            							//echo "<script> alert('アップロード成功しました！');location.href='admin_mypage.php';</script>";
-        						}
-   						} 
+    					//エラーかどうか
+    					if ($upfile['error'] == 00) {
+        					$ext = strtolower(pathinfo($upfile['name'],PATHINFO_EXTENSION));
+        					//拡張子判定
+        					if (!in_array($ext,$imagesExt)){
+            						echo "<script> alert('対応するファイル形式にしてください。');</script>";
+        					}
+        					//パスがあるか
+        					if (!is_dir($path)){
+            						mkdir($path,0777,true);  
+        					}
+        					$filename = md5(uniqid(microtime(true),true)).'.'.$ext; //ユニークidをつける
+        					$destname = $path."/".$filename; //
+        					// アップロード成功か
+        					if (!move_uploaded_file($upfile['tmp_name'],$destname)){
+            						echo "<script> alert('アップロード失敗しました。');</script>";
+        					}
+        					else{
+							$upfile_name = $filename;
+            						//echo "<script> alert('アップロード成功しました！');location.href='admin_mypage.php';</script>";
+        					}
     					}
-    					$message = upload_file($upfile);
-					if($message !== "対応するファイル形式にしてください。" && $message !== "アップロード失敗しました。"){
-						echo "filename=".$filename;
+					
+					//アップロード成功
+					if(!empty($upfile_name)){
+						//以前の画像、動画の削除
+						$sql = 'select filename from cmt_list where num=:num and user=:user';
+						$stmt = $pdo->prepare($sql);
+						$stmt->bindParam(':num', $num, PDO::PARAM_INT);
+						$stmt->bindParam(':user', $user, PDO::PARAM_STR);
+						$stmt->execute();
+						if($stmt->rowCount() == 1){
+							$result = $stmt->fetch();
+							$delete_filename = $result['filename'];
+							if(!empty($delete_filename)){
+								unlink($path."/".$delete_filename);
+							}
+						}
+
 						//filename情報を追加
 						$sql = 'update cmt_list set comment=:comment,filename=:filename,genre=:genre where num=:num and user=:user';
 						$stmt = $pdo->prepare($sql);
@@ -127,7 +142,15 @@ require '../tools/database_connect/database_connect.php';
 						
                 				$stmt->execute();
 					}else{
-						echo $message;
+						//入力したデータをupdateによって編集する
+						$sql = 'update cmt_list set comment=:comment,genre=:genre where num=:num and user=:user';
+						$stmt = $pdo->prepare($sql);
+						$stmt->bindParam(':comment', $comment, PDO::PARAM_STR);
+						$stmt->bindParam(':genre', $genre, PDO::PARAM_STR);
+						//$stmt->bindParam(':password_hash', $admin_password_hash, PDO::PARAM_STR);
+						$stmt->bindParam(':num', $num, PDO::PARAM_INT);
+						$stmt->bindParam(':user', $user, PDO::PARAM_STR);
+						$stmt->execute();
 					}
     				}else {
 					//入力したデータをupdateによって編集する
@@ -179,34 +202,35 @@ require '../tools/database_connect/database_connect.php';
 			//画像・動画投稿
 			if(!empty($_FILES['upfile'])){
     				$upfile = $_FILES['upfile'];
-    				function upload_file($files, $path = "../upload",$imagesExt=['jpg','png','jpeg','gif','mp4']) {
+    				$path = "../upload";
+				$imagesExt=['jpg','png','jpeg','gif','mp4'];
+				$upfile_name = "";
     
-    					//エラーかどうか
-    					if ($files['error'] == 00) {
-        					$ext = strtolower(pathinfo($files['name'],PATHINFO_EXTENSION));
-        					//拡張子判定
-        					if (!in_array($ext,$imagesExt)){
-            						return "対応するファイル形式にしてください。";
-        					}
-        					//パスがあるか
-        					if (!is_dir($path)){
-            						mkdir($path,0777,true);  
-        					}
-        					$filename = md5(uniqid(microtime(true),true)).'.'.$ext; //ユニークidをつける
-        					$destname = $path."/".$filename; //
-        					// アップロード成功か
-        					if (!move_uploaded_file($files['tmp_name'],$destname)){
-            						return "アップロード失敗しました。";
-        					}
-        					else{
-							return $filename;
-        					}
-   					} 
+    				//エラーかどうか
+    				if ($upfile['error'] == 00) {
+        				$ext = strtolower(pathinfo($upfile['name'],PATHINFO_EXTENSION));
+        				//拡張子判定
+        				if (!in_array($ext,$imagesExt)){
+            					echo "<script> alert('対応するファイル形式にしてください。');</script>";
+        				}
+        				//パスがあるか
+        				if (!is_dir($path)){
+            					mkdir($path,0777,true);  
+        				}
+        				$filename = md5(uniqid(microtime(true),true)).'.'.$ext; //ユニークidをつける
+        				$destname = $path."/".$filename; //
+        				// アップロード成功か
+        				if (!move_uploaded_file($upfile['tmp_name'],$destname)){
+            					echo "<script> alert('アップロード失敗しました。');</script>";
+        				}
+        				else{
+						$upfile_name = $filename;
+            					//echo "<script> alert('アップロード成功しました！');location.href='admin_mypage.php';</script>";
+        				}
     				}
-    				$message = upload_file($upfile);
-				if($message !== "対応するファイル形式にしてください。" && $message !== "アップロード失敗しました。"){
-					$filename = $message;
-					echo "filename=".$filename;
+    				
+				//アップロード成功
+				if(!empty($upfile_name)){
 					//insertを行ってデータを入力
 					$sql = $pdo -> prepare("INSERT INTO cmt_list (id, user, comment, filename, genre) VALUES (:id, :user, :comment, :filename, :genre)");
 					$sql -> bindParam(':id', $id, PDO::PARAM_INT);
@@ -218,8 +242,15 @@ require '../tools/database_connect/database_connect.php';
 					$sql -> execute();
 
 					//echo "<script> alert('アップロード成功しました！');location.href='admin_mypage.php';</script>";
-				}else{
-					echo $message;
+				}else {
+					//insertを行ってデータを入力
+					$sql = $pdo -> prepare("INSERT INTO cmt_list (id, user, comment, genre) VALUES (:id, :user, :comment, :genre)");
+					$sql -> bindParam(':id', $id, PDO::PARAM_INT);
+					$sql -> bindParam(':user', $user, PDO::PARAM_STR);
+					$sql -> bindParam(':comment', $comment, PDO::PARAM_STR);
+					$sql -> bindParam(':genre', $genre, PDO::PARAM_STR);
+					//$sql -> bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
+					$sql -> execute();
 				}
     			}else{
 				//insertを行ってデータを入力
@@ -267,35 +298,6 @@ require '../tools/database_connect/database_connect.php';
 		}
 	}
 
-	//編集フォームの処理
-	/*elseif(isset($_POST['edit_number'])){
-		$case = 4;
-		if(!empty($_POST['edit_number'])){
-			//編集番号を格納
-			$num = $_POST['edit_number'];
-			//$password = $_POST['edit_password'];
-			
-			if($num > 0){
-				$sql = 'SELECT * FROM cmt_list';
-				$stmt = $pdo->query($sql);
-				$results = $stmt->fetchAll();
-				//編集対象番号のコメントを取得する
-				foreach($results as $row){
-					if($row['num'] === $num){
-						//編集番号をセット
-						$e_number = $row['num'];
-						//名前とコメントを取得
-						$user = $row['user'];
-						$comment = $row['comment'];
-						$is_correct = 1;
-					}/*elseif($row['id'] === $id){
-						$is_correct = 2;
-					}
-				}
-			}
-		}
-	}*/
-
 	//クロスサイトリクエストフォージェリ（CSRF）対策
 	$_SESSION['token'] = base64_encode(openssl_random_pseudo_bytes(32));
 	$token = $_SESSION['token'];
@@ -308,8 +310,8 @@ require '../tools/database_connect/database_connect.php';
   <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
   <link rel="stylesheet" type="text/css" href="../layout/mypage.css">
   <title><?=htmlspecialchars($user, ENT_QUOTES, 'UTF-8')?>さんの管理者ページ</title>
-  <!--
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <!--
   <script>
 	$(document).ready(function(){
 		$(".pic").on("load",function(){
@@ -434,7 +436,7 @@ require '../tools/database_connect/database_connect.php';
 <p>投稿一覧</p>
 
 <form id="submit_form" action="admin_mypage.php" method="POST">
-ジャンル：<select name="toukou" id="submit_select" onchange="submit(this.form)">
+ジャンル：<select name="toukou" id="submit_select">
 <option value="選択してください">選択してください</option>
 <option value="全て">全て</option>
 <option value="食べ物">食べ物</option>
@@ -450,17 +452,19 @@ require '../tools/database_connect/database_connect.php';
 </select>
 <input type = "hidden" name = "token" value = <?=htmlspecialchars($token, ENT_QUOTES, 'UTF-8')?> >
 </form>
-<!--
 <script type="text/javascript">
  $(function(){
+   //if(!empty($_POST['toukou'])){
+      //document.getElementById('submit_select').value = $_POST['toukou'];
+   //}
    $("#submit_select").change(function(){
       var r = $("option:selected").val();
       $("#submit_form").submit();
-      $("#submit_select").val(r);
+      
+      //$("#submit_select").val(r);
    });
  });
 </script>
--->
 
 <?php
 
@@ -477,7 +481,14 @@ require '../tools/database_connect/database_connect.php';
 			$genre = $row['genre'];
 			$username = $row['user'];
 			echo "<div class='box'>";
-    			echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+			//画像または動画を表示
+			$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+			$imgext = ['jpg','png','jpeg','gif'];
+			if(in_array($ext,$imgext)){
+				echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+    			}else{
+				echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+			}
 			//削除ボタン
 			echo "<form method = 'post' action = 'admin_mypage.php'>";
 			echo "<input type = 'hidden' name = 'delete_number' value = ".$num.">";
@@ -502,12 +513,20 @@ require '../tools/database_connect/database_connect.php';
 			$results = $stmt->fetchAll();
 			foreach ($results as $row){
     				//$rowの中にはテーブルのカラム名が入る
+				$num = $row['num'];
 				$comment = $row['comment'];
 				$filename = $row['filename'];
 				$genre = $row['genre'];
 				$username = $row['user'];
 				echo "<div class='box'>";
-    				echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+    				//画像または動画を表示
+				$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+				$imgext = ['jpg','png','jpeg','gif'];
+				if(in_array($ext,$imgext)){
+					echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+    				}else{
+					echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+				}
 				//削除ボタン
 				echo "<form method = 'post' action = 'admin_mypage.php'>";
 				echo "<input type = 'hidden' name = 'delete_number' value = ".$num.">";
@@ -537,11 +556,19 @@ require '../tools/database_connect/database_connect.php';
 			$results = $stmt->fetchAll();
 			foreach ($results as $row){
     				//$rowの中にはテーブルのカラム名が入る
+				$num = $row['num'];
 				$comment = $row['comment'];
 				$filename = $row['filename'];
 				$username = $row['user'];
 				echo "<div class='box'>";
-    				echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+				//画像または動画を表示
+				$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+				$imgext = ['jpg','png','jpeg','gif'];
+				if(in_array($ext,$imgext)){
+					echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+    				}else{
+					echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+				}
 				//削除ボタン
 				echo "<form method = 'post' action = 'admin_mypage.php'>";
 				echo "<input type = 'hidden' name = 'delete_number' value = ".$num.">";
