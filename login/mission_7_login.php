@@ -34,13 +34,13 @@
 
 <body>
 <h1>ログイン</h1>
-        <form action="mission_7_login.php" method="POST">
+        <form action="mission_7_login_check.php" method="POST">
             <fieldset>
                 <legend>ログインフォーム</legend>
                 <div><font color="#ff0000">
-                <label for="name">ユーザーID</label><input type="text" name="name" placeholder="ユーザーIDを入力" value="<?php if (!empty($_POST["name"])) {echo htmlspecialchars($_POST["name"], ENT_QUOTES);} ?>">
+                <label for="name">ユーザー名</label><input type="text" name="name" placeholder="ユーザー名を入力" value="<?php if (!empty($_POST["name"])) {echo htmlspecialchars($_POST["name"], ENT_QUOTES);} ?>">
                 <br>
-                <label for="pass">パスワード</label><input type="pass" name="pass" value="" placeholder="パスワードを入力">
+                <label for="pass">パスワード</label><input type="password" name="pass" value="" placeholder="パスワードを入力">
                 <br>
                 <input type="submit" value="ログイン">
             </fieldset>
