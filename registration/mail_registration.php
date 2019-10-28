@@ -17,26 +17,39 @@
 <head>
  <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
  <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
- <link rel="stylesheet" type="text/css" href="../layout/mail_registration.css">
- <title>メール登録画面</title>
+ <link rel="stylesheet" type="text/css" href="../layout/registration/mail_registration.css">
+ <title>メール登録</title>
 </head>
 <body>
-<div class = "registration_area">
 
-<h1>おすきにどうぞ！</h1>
-<h2>メール登録</h2>
+<div class = "head_line">
+
+<img src="../images/logo.jpg" class="logo">
+<p class="title">メール登録</p>
+
+</div>
  
-<p>アカウントの作成には、<strong>メールアドレスの登録が必要です</strong>。</p>
-<p>アカウント登録に用いるメールアドレスを入力してください。</p>
-<br>
+<div class="table">
+
+
 <form action="mail_check.php" method="post" class = "form">
- 
-<p><label for="mail">メールアドレス：</lavel></p>
-<p><input type="email" name="mail" placeholder="welcome@example.com"></p>
+<table align="center">
+
+<tr align="center"><td colspan="2">アカウントの作成には、<strong>メールアドレスの登録が必要です</strong>。</td></tr>
+<tr align="center"><td colspan="2">アカウント登録に用いるメールアドレスを入力してください。</td></tr>
+
+<tr>
+<td><lavel for="mail">メールアドレス:</lavel></td>
+<td><input type="email" name="mail" id = "mail" placeholder="welcome@example.com" style = "margin:30px; height: 30px; width: 300px"/></td>
+</tr>
  
 <input type="hidden" name="token" value="<?=$token?>">
-<input type="submit" value="登録する" class = "registrate">
+
+<tr align="center">
+<td colspan="2"><input type="submit" value="登録する" align="center" style = "width:100px; height: 30px"/></td>
+</tr>
  
+</table>
 </form>
  
 </div>

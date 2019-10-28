@@ -1,6 +1,7 @@
 <?php
 require '../phpmailer/send_test_mail.php';
 require '../tools/database_connect/database_connect.php';
+require '../tools/make_url/make_url.php';
 
 	session_start();
 	
@@ -89,7 +90,7 @@ require '../tools/database_connect/database_connect.php';
 	
 		$urltoken = hash('sha256',uniqid(rand(),1));
 		//*****.comの部分は、このページが置いてあるURLと同じ
-		$url = "https://*****.com/mission7_PHP/registration/user_registration.php"."?urltoken=".$urltoken;
+		$url = make_url()."/mission7_PHP/registration/user_registration.php"."?urltoken=".$urltoken;
 		
 		//ここでデータベースに登録する
 		try{
@@ -137,13 +138,18 @@ require '../tools/database_connect/database_connect.php';
 <head>
  <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
  <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
- <link rel="stylesheet" type="text/css" href="../layout/mail_check.css">
- <title>メール確認画面</title>
+ <link rel="stylesheet" type="text/css" href="../layout/registration/mail_check.css">
+ <title>メールアドレス確認</title>
 </head>
 <body>
-<div class = "mail_check">
-<h1>おすきにどうぞ！</h1>
+<div class = "head_line">
+
+<img src="../images/logo.jpg" class="logo">
+<p class="title">メールアドレスチェック</p>
+
+</div>
  
+<div class = "message_area">
 <?php if (count($errors) === 0): ?>
  
 <?=$message?>
@@ -156,7 +162,7 @@ foreach($errors as $value){
 }
 ?>
  
-<input type="button" value="戻る" onClick="history.back()" class = "back">
+<input type="button" value="戻る" onClick="history.back()" align="center" style = "width:100px; height: 30px">
  
 <?php endif; ?>
  

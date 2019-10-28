@@ -68,54 +68,75 @@ require '../tools/database_connect/database_connect.php';
 <head>
  <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
  <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
- <link rel="stylesheet" type="text/css" href="../layout/user_registration.css">
- <title>ユーザー登録画面</title>
+ <link rel="stylesheet" type="text/css" href="../layout/registration/user_registration.css">
+ <title>ユーザー登録</title>
 </head>
 
 <body>
-<div class = "registration_area">
+<div class = "head_line">
 
-<h1>おすきにどうぞ！</h1>
+<img src="../images/logo.jpg" class="logo">
  
 <?php if (count($errors) === 0): ?>
 
-<h2>ユーザー登録</h2>
+<p class="title">ユーザー登録</p>
  
+</div>
+
+<div class="table">
 <form action="user_check.php" method="post" class = "form">
+<table align="center">
  
-<p>メールアドレス：</p>
-<p class = "mail"><?=htmlspecialchars($mail, ENT_QUOTES, 'UTF-8')?></p><!-- text/plainをtext/htmlへ変換 -->
-<p><lavel for="user">ユーザー名：</lavel></p>
-<p><input type="text" name="user"></p>
-<p><lavel for="password">パスワード：</lavel></p>
-<p><input type="password" name="password"></p>
-<p><lavel for="password2">パスワード(確認用)：</lavel></p>
-<p><input type="password" name="password2"></p>
+<tr>
+<td>メールアドレス：</td>
+<td><?=htmlspecialchars($mail, ENT_QUOTES, 'UTF-8')?></td>
+</tr>
+
+<tr>
+<td><lavel for="user">ユーザー名:</lavel></td>
+<td><input type="text" name="user" id = "username" style = "margin:30px; height: 30px; width: 300px"/></td>
+</tr>
+
+<tr>
+<td><lavel for="password">パスワード:</lavel></td>
+<td><input type="password" name="password" id="password" style = "margin:30px; height: 30px; width: 300px"/></td>
+</tr>
+
+<tr>
+<td><lavel for="password2">パスワード(確認用):</lavel></td>
+<td><input type="password" name="password2" id="password" style = "margin:30px; height: 30px; width: 300px"/></td>
+</tr>
  
 <input type="hidden" name="token" value="<?=$token?>">
-<input type="submit" value="確認する" class = "confirm">
+
+<tr align="center">
+<td colspan="2"><input type="submit" value="確認する" align="center" style = "width:100px; height: 30px"/></td>
+</tr>
+
+</table>
 </form>
 
  
-<h2>注意事項</h2>
+<h2 align="center">注意事項</h2>
 <ul>
 <li>ユーザー名は、<strong>10文字以内</strong>で入力して下さい。</li>
 <li>パスワードは、<strong>半角英数字の5文字以上30文字以下</strong>で入力して下さい。</li>
 </ul>
 
-</form>
+</div>
  
 <?php elseif(count($errors) > 0): ?>
  
+</div>
+<div class="table">
 <?php
 foreach($errors as $value){
-	echo "<p><strong>".$value."</strong></p>";
+	echo "<p align='center'><strong>".$value."</strong></p>";
 }
 ?>
+</div>
  
 <?php endif; ?>
-
-</div>
  
 </body>
 </html>

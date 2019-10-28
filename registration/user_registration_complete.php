@@ -96,24 +96,30 @@ require '../phpmailer/send_complete_mail.php';
 <head>
   <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
   <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
-  <link rel="stylesheet" type="text/css" href="../layout/user_registration_complete.css">
-  <title>ユーザー登録完了画面</title>
+  <link rel="stylesheet" type="text/css" href="../layout/registration/user_registration_complete.css">
+  <title>ユーザー登録完了</title>
 </head>
 <body>
-<div class="complete_area">
- 
-<h1>おすきにどうぞ！</h1>
+
+<div class = "head_line">
+<img src="../images/logo.jpg" class="logo">
 
 <?php if (count($errors) === 0): ?>
-<h2>ユーザー登録完了</h2>
+<p class="title">ユーザー登録完了</p>
  
+</div>
+
+<div class="message_area">
 <p>登録完了いたしました。</p>
 <p>下のログインボタンからログインをしてください。</p>
-<p><input type="button" value="ログイン" onclick="location.href='../login/login.php'" class = "login"></p>
+<p><input type="button" value="ログイン" onclick="location.href='../login/mission_7_login.php'" align="center" style = "width:100px; height: 30px"/></p>
  
 <?php elseif(count($errors) > 0): ?>
- 
+</div>
+<div class="message_area">
+
 <?php
+
 foreach($errors as $value){
 	echo "<p><strong>".$value."</strong></p>";
 }
