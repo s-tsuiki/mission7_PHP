@@ -60,7 +60,7 @@
 	<div class = "message_area">
         <p><?=$message?></p>
 	<br>
-        <p><a href="admin_login.php">トップページに戻る</a></p>
+        <p><a href="admin_login.php">管理者ログインページに戻る</a></p>
 
 	</div>
     </body>
