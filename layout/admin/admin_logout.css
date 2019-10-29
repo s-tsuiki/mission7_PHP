@@ -1,0 +1,29 @@
+@charset "utf-8";
+
+.headline{
+	height: 200px;
+}
+
+.title{
+	float: right;
+	font-size: 50px;
+	padding-right: 50px;
+	text-decoration: blink;
+	text-shadow: 2px;
+	font-family: cursive;
+}
+
+.logo{
+	width: 300px;
+	margin-left: 30px;
+}
+
+.message_area {
+	background-color: #FFF0F5;
+	padding: 20px;
+	position: absolute;
+	align-self: center;
+	text-align: center;
+	width: 100%;
+}
+

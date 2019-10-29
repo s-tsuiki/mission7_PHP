@@ -72,45 +72,60 @@ require '../../tools/database_connect/database_connect.php';
 <head>
  <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
  <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
- <link rel="stylesheet" type="text/css" href="../../layout/user_registration.css">
- <title>新規管理者承認画面</title>
+ <link rel="stylesheet" type="text/css" href="../../layout/admin/judge/admin_judge.css">
+ <title>新規管理者承認</title>
 </head>
 
 <body>
-<div class = "registration_area">
+<div class = "head_line">
 
-<h1>おすきにどうぞ！</h1>
+<img src="../../images/logo.jpg" class="logo">
  
 <?php if (count($errors) === 0): ?>
 
-<h2>管理者リクエストの承認</h2>
- 
-<p>下記のユーザーの管理者リクエストを承認しますか？</p>
-<br>
-
-<form action="admin_judge_check.php" method="post" class = "form">
-<p>ユーザー名：</p>
-<p><?=htmlspecialchars($user, ENT_QUOTES, 'UTF-8')?></p>
-<p>メールアドレス：</p>
-<p class = "mail"><?=htmlspecialchars($mail, ENT_QUOTES, 'UTF-8')?></p><!-- text/plainをtext/htmlへ変換 -->
-<br>
-<input type="hidden" name="token" value="<?=$token?>">
-<input type="submit" value="承認する" name="agree"class = "confirm">
-<input type="submit" value="承認しない" name="disagree" class = "confirm">
-</form>
-
- 
-<?php elseif(count($errors) > 0): ?>
- 
-<?php
-foreach($errors as $value){
-	echo "<p><strong>".$value."</strong></p>";
-}
-?>
- 
-<?php endif; ?>
+<p class="title">管理者リクエストの承認</p>
 
 </div>
  
+<div class="table">
+<p align="center">下記のユーザーの管理者リクエストを承認しますか？</p>
+<br>
+<form action="admin_judge_check.php" method="post" class = "form">
+<table align="center">
+ 
+<tr>
+<td>ユーザー名:</td>
+<td><?=htmlspecialchars($user, ENT_QUOTES, 'UTF-8')?></td>
+</tr>
+
+<tr>
+<td>メールアドレス：</td>
+<td><?=htmlspecialchars($mail, ENT_QUOTES, 'UTF-8')?></td>
+</tr>
+
+<input type="hidden" name="token" value="<?=$token?>">
+
+<tr>
+<td><input type="submit" value="承認する" name="agree" style = "width:100px; height: 30px"/></td>
+<td><input type="submit" value="承認しない" name="disagree" style = "width:100px; height: 30px"/></td>
+</tr>
+
+</table>
+</form>
+ 
+</div>
+
+<?php elseif(count($errors) > 0): ?>
+ 
+<div class="table">
+<?php
+foreach($errors as $value){
+	echo "<p align='center'><strong>".$value."</strong></p>";
+}
+?>
+</div>
+
+<?php endif; ?>
+
 </body>
 </html>

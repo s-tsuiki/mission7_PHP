@@ -123,7 +123,7 @@ require '../../tools/make_url/make_url.php';
  			session_destroy();
  	
  			$message = "<p>管理者にメールをお送りしました。</p>";
-			$message = $message."<p>管理人が承認するとメールが送信されますので、メールに記載されたURLからメールの送信後24時間以内にご登録下さい。</p>";
+			$message = $message."<p>管理人が承認するとメールが送信されますので、メールに記載されたURLから<strong>メールの送信後24時間以内</strong>にご登録下さい。</p>";
 			$message = $message."<p><strong>24時間以内に承認メールが来ない場合は、もう一度この操作を行ってください。</strong></p>";
  	
 	 	} else {
@@ -138,13 +138,18 @@ require '../../tools/make_url/make_url.php';
 <head>
  <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
  <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
- <link rel="stylesheet" type="text/css" href="../../layout/mail_check.css">
- <title>メール確認画面</title>
+ <link rel="stylesheet" type="text/css" href="../../layout/admin/registration/admin_mail_check.css">
+ <title>管理者メール確認</title>
 </head>
 <body>
-<div class = "mail_check">
-<h1>おすきにどうぞ！</h1>
+<div class = "head_line">
+
+<img src="../../images/logo.jpg" class="logo">
+
+</div>
  
+<div class = "message_area">
+
 <?php if (count($errors) === 0): ?>
  
 <?=$message?>
@@ -157,10 +162,11 @@ foreach($errors as $value){
 }
 ?>
  
-<input type="button" value="トップページに戻る" onClick="location.href='../admin_login.php'" class = "back">
+<a href="../admin_login.php">トップページに戻る</a>
  
 <?php endif; ?>
- 
+
 </div>
+
 </body>
 </html>

@@ -46,15 +46,18 @@
     <head>
 	<meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
   	<meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
-	<link rel="stylesheet" type="text/css" href="../layout/admin_logout.css">
-        <title>管理者ログアウト画面</title>
+	<link rel="stylesheet" type="text/css" href="../layout/admin/admin_logout.css">
+        <title>管理者ログアウト</title>
     </head>
     <body>
-	<div class="logout_area">
+	<div class = "head_line">
 
-	<h1>おすきにどうぞ！</h1>
-        <h2>ログアウト</h2>
-	<br>
+	<img src="../images/logo.jpg" class="logo">
+	<p class="title">管理者ログアウト</p>
+
+	</div>
+ 
+	<div class = "message_area">
         <p><?=$message?></p>
 	<br>
         <p><a href="admin_login.php">トップページに戻る</a></p>

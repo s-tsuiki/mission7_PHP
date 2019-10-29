@@ -77,7 +77,7 @@ require '../tools/database_connect/database_connect.php';
 				//POSTで各値を受け取る
 				$num = $_POST['e_number'];
 				$user = $_POST['user'];
-				$comment = $_POST['comment']."<br>"."（この投稿は管理人によって編集されました）"."<br>".$date_time;
+				$comment = $_POST['comment']."<br>"."（この投稿は管理者によって編集されました）"."<br>".$date_time;
 				$genre = $_POST['genre'];
 				//$admin_password = $_POST['admin_password'];
 
@@ -280,6 +280,21 @@ require '../tools/database_connect/database_connect.php';
 			
 			//入力したデータをdeleteによって削除する
 			if($num > 0){
+				//以前の画像、動画の削除
+				$path = "../upload";
+				$sql = 'select filename from cmt_list where num=:num and user=:user';
+				$stmt = $pdo->prepare($sql);
+				$stmt->bindParam(':num', $num, PDO::PARAM_INT);
+				$stmt->bindParam(':user', $user, PDO::PARAM_STR);
+				$stmt->execute();
+				if($stmt->rowCount() == 1){
+					$result = $stmt->fetch();
+					$delete_filename = $result['filename'];
+					if(!empty($delete_filename)){
+						unlink($path."/".$delete_filename);
+					}
+				}
+
 				$sql = 'delete from cmt_list where num=:num';
 				$stmt = $pdo->prepare($sql);
 				$stmt->bindParam(':num', $num, PDO::PARAM_INT);
@@ -308,7 +323,7 @@ require '../tools/database_connect/database_connect.php';
 <head>
   <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
   <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
-  <link rel="stylesheet" type="text/css" href="../layout/mypage.css">
+  <link rel="stylesheet" type="text/css" href="../layout/admin/admin_mypage.css">
   <title><?=htmlspecialchars($user, ENT_QUOTES, 'UTF-8')?>さんの管理者ページ</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <!--
@@ -383,21 +398,17 @@ require '../tools/database_connect/database_connect.php';
 <body>
 
 <div class = "user_bar">
-  <h2>ようこそ、<strong><?=htmlspecialchars($admin_user, ENT_QUOTES, 'UTF-8')?></strong>さん</h2>
-
-  <!--CSRF対策-->
-  <form method = "post" action = "admin_logout.php">
-   <input type = "hidden" name = "token" value = <?=htmlspecialchars($token, ENT_QUOTES, 'UTF-8')?> >
-   <input type = "submit" value="ログアウト" class = "logout"><br>
-  </form>
 
 </div>
 
-<div class = "start_bar">
-  <div class = "title">
-    <h1>おすきにどうぞ！</h1><!--あとで、ロゴ画像に変更-->
-    <h2>管理者ページ</h2>
-  </div>
+<div class = "head_line">
+   <img src="../images/logo.jpg" class="logo">
+   <p class="title"><strong><?=htmlspecialchars($admin_user, ENT_QUOTES, 'UTF-8')?></strong>さんの管理者ページ</p>
+   <!--CSRF対策-->
+  <form method = "post" action = "admin_logout.php">
+   <input type = "hidden" name = "token" value = <?=htmlspecialchars($token, ENT_QUOTES, 'UTF-8')?> >
+   <input type = "submit" value="ログアウト" style = "width:100px; height: 30px"/><br>
+  </form>
 </div>
 
 <br>
@@ -433,7 +444,13 @@ require '../tools/database_connect/database_connect.php';
 ?>
 </div>
 
-<p>投稿一覧</p>
+<h2>投稿一覧</h2>
+<!--CSRF対策-->
+<form method = "post" action = "admin_mypage.php">
+ <input type = "hidden" name = "token" value = <?=htmlspecialchars($token, ENT_QUOTES, 'UTF-8')?> >
+ <input type = "submit" value="更新" style = "width:100px; height: 30px"/><br> 
+</form>
+<br>
 
 <form id="submit_form" action="admin_mypage.php" method="POST">
 ジャンル：<select name="toukou" id="submit_select">
@@ -482,25 +499,36 @@ require '../tools/database_connect/database_connect.php';
 			$username = $row['user'];
 			echo "<div class='box'>";
 			//画像または動画を表示
-			$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
-			$imgext = ['jpg','png','jpeg','gif'];
-			if(in_array($ext,$imgext)){
-				echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
-    			}else{
-				echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+			if(!empty($filename)){
+				$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+				$imgext = ['jpg','png','jpeg','gif'];
+				if(in_array($ext,$imgext)){
+					echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+    				}else{
+					echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+				}
+			}else{
+				echo "<br><br><br><br><br>";
 			}
+			
 			//削除ボタン
+			echo "<div class='button'>";
 			echo "<form method = 'post' action = 'admin_mypage.php'>";
 			echo "<input type = 'hidden' name = 'delete_number' value = ".$num.">";
-			echo "<input type = 'submit' value = '削除' class = 'submit'>";
+			echo "<input type = 'submit' value = '削除' style = 'width:100px; height: 30px'/>";
 			echo "<input type = 'hidden' name = 'token' value = ".htmlspecialchars($token, ENT_QUOTES, 'UTF-8')." >";
 			echo "</form>";
+			echo "</div>";
 			//編集ボタン
+			echo "<div class='button'>";
 			echo "<form method = 'post' action = 'admin_post.php'>";
 			echo "<input type = 'hidden' name = 'edit_number' value = ".$num.">";
-			echo "<input type = 'submit' value = '編集' class = 'submit'>";
+			echo "<input type = 'submit' value = '編集' style = 'width:100px; height: 30px'/>";
 			echo "<input type = 'hidden' name = 'token' value = ".htmlspecialchars($token, ENT_QUOTES, 'UTF-8')." >";
 			echo "</form>";
+			echo "</div>";
+
+			echo "<br>";
 			
     			echo $comment."<br>by. ".$username."jungle".$genre."</div>";
 		}
@@ -520,25 +548,35 @@ require '../tools/database_connect/database_connect.php';
 				$username = $row['user'];
 				echo "<div class='box'>";
     				//画像または動画を表示
-				$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
-				$imgext = ['jpg','png','jpeg','gif'];
-				if(in_array($ext,$imgext)){
-					echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
-    				}else{
-					echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+				if(!empty($filename)){
+					$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+					$imgext = ['jpg','png','jpeg','gif'];
+					if(in_array($ext,$imgext)){
+						echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+    					}else{
+						echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+					}
+				}else{
+					echo "<br><br><br><br><br>";
 				}
 				//削除ボタン
+				echo "<div class='button'>";
 				echo "<form method = 'post' action = 'admin_mypage.php'>";
 				echo "<input type = 'hidden' name = 'delete_number' value = ".$num.">";
-				echo "<input type = 'submit' value = '削除' class = 'submit'>";
+				echo "<input type = 'submit' value = '削除' style = 'width:100px; height: 30px'/>";
 				echo "<input type = 'hidden' name = 'token' value = ".htmlspecialchars($token, ENT_QUOTES, 'UTF-8')." >";
 				echo "</form>";
+				echo "</div>";
 				//編集ボタン
+				echo "<div class='button'>";
 				echo "<form method = 'post' action = 'admin_post.php'>";
 				echo "<input type = 'hidden' name = 'edit_number' value = ".$num.">";
-				echo "<input type = 'submit' value = '編集' class = 'submit'>";
+				echo "<input type = 'submit' value = '編集' style = 'width:100px; height: 30px'/>";
 				echo "<input type = 'hidden' name = 'token' value = ".htmlspecialchars($token, ENT_QUOTES, 'UTF-8')." >";
 				echo "</form>";
+				echo "</div>";
+
+				echo "<br>";
 				
     				echo $comment."<br>by. ".$username."jungle".$genre."</div>";
 			}
@@ -562,25 +600,35 @@ require '../tools/database_connect/database_connect.php';
 				$username = $row['user'];
 				echo "<div class='box'>";
 				//画像または動画を表示
-				$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
-				$imgext = ['jpg','png','jpeg','gif'];
-				if(in_array($ext,$imgext)){
-					echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
-    				}else{
-					echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+				if(!empty($filename)){
+					$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+					$imgext = ['jpg','png','jpeg','gif'];
+					if(in_array($ext,$imgext)){
+						echo "<div class='pic' id='pic'><img src='../upload/".$filename."'></div>";
+    					}else{
+						echo "<div class='pic' id='pic'><video width='440px' src='../upload/".$filename."' controls></video></div>";
+					}
+				}else{
+					echo "<br><br><br><br><br>";
 				}
 				//削除ボタン
+				echo "<div class='button'>";
 				echo "<form method = 'post' action = 'admin_mypage.php'>";
 				echo "<input type = 'hidden' name = 'delete_number' value = ".$num.">";
-				echo "<input type = 'submit' value = '削除' class = 'submit'>";
+				echo "<input type = 'submit' value = '削除' style = 'width:100px; height: 30px'/>";
 				echo "<input type = 'hidden' name = 'token' value = ".htmlspecialchars($token, ENT_QUOTES, 'UTF-8')." >";
 				echo "</form>";
+				echo "</div>";
 				//編集ボタン
+				echo "<div class='button'>";
 				echo "<form method = 'post' action = 'admin_post.php'>";
 				echo "<input type = 'hidden' name = 'edit_number' value = ".$num.">";
-				echo "<input type = 'submit' value = '編集' class = 'submit'>";
+				echo "<input type = 'submit' value = '編集' style = 'width:100px; height: 30px'/>";
 				echo "<input type = 'hidden' name = 'token' value = ".htmlspecialchars($token, ENT_QUOTES, 'UTF-8')." >";
 				echo "</form>";
+				echo "</div>";
+
+				echo "<br>";
 
     				echo $comment."<br>by. ".$username."jungle".$genre."</div>";
 			}
@@ -592,15 +640,9 @@ require '../tools/database_connect/database_connect.php';
 	$pdo = null;
 ?>
 
-<!--CSRF対策-->
-<form method = "post" action = "admin_mypage.php#2"  id = "2">
- <input type = "hidden" name = "token" value = <?=htmlspecialchars($token, ENT_QUOTES, 'UTF-8')?> >
- <input type = "submit" value="コメントを更新" class = "update"><br> 
-</form>
-
 <form method = "post" action = "admin_post.php">
 <input type = "hidden" name = "token" value = <?=htmlspecialchars($token, ENT_QUOTES, 'UTF-8')?> >
-<input type="submit" value="投稿" class = "toukou">
+<input type="submit" value="+" class = "toukou">
 </form>
 
 </body>

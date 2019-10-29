@@ -143,27 +143,31 @@ require '../../tools/make_url/make_url.php';
 <head>
  <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
  <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
- <link rel="stylesheet" type="text/css" href="../layout/mail_check.css">
- <title>メール確認画面</title>
+ <link rel="stylesheet" type="text/css" href="../../layout/admin/judge/admin_judge_check.css">
+ <title>管理者承認結果</title>
 </head>
 <body>
-<div class = "mail_check">
-<h1>おすきにどうぞ！</h1>
+<div class = "head_line">
+
+<img src="../../images/logo.jpg" class="logo">
  
 <?php if (count($errors) === 0): ?>
-<h2>承認完了</h2>
+<p class="title">承認完了</p>
+</div>
  
+<div class = "message_area">
 <?=$message?>
  
 <?php elseif(count($errors) > 0): ?>
  
+<div class = "message_area">
 <?php
 foreach($errors as $value){
-	echo "<p><strong>".$value."</strong></p>";
+	echo "<p align='center'><strong>".$value."</strong></p>";
 }
 ?>
  
-<input type="button" value="戻る" onClick="history.back()" class = "back">
+<input type="button" value="戻る" onClick="history.back()"  style = "width:100px; height: 30px"/>
  
 <?php endif; ?>
  

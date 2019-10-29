@@ -41,17 +41,20 @@
 <head>
  <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
  <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
- <link rel="stylesheet" type="text/css" href="../../layout/admin_mail_send.css">
- <title>管理者メール送信画面</title>
+ <link rel="stylesheet" type="text/css" href="../../layout/admin/registration/admin_mail_send.css">
+ <title>管理者メール送信</title>
 </head>
 <body>
-<div class = "registration_area">
+<div class = "head_line">
 
-<h1>おすきにどうぞ！</h1>
-<h2>管理者リクエスト要求</h2>
- 
-<br>
-<h2>ようこそ、<?=htmlspecialchars($_SESSION['user'], ENT_QUOTES, 'UTF-8')?>さん</h2>
+<img src="../../images/logo.jpg" class="logo">
+<p class="title">>管理者リクエスト要求</p>
+
+</div>
+
+<div class = "message_area">
+
+<h2>ようこそ、<strong><?=htmlspecialchars($_SESSION['user'], ENT_QUOTES, 'UTF-8')?></strong>さん</h2>
 <p>アカウントの作成には、<strong>管理人からの承認が必要です</strong>。</p>
 <p>管理人にリクエストメールを送信しますか？</p>
 <br>
@@ -60,7 +63,7 @@
 <input type="hidden" name="token" value="<?=$token?>">
 <input type="submit" value="ログアウト" class = "back">
 </form>
-<br>
+
 <form action="admin_mail_check.php" method="post" class = "form">
 <input type="hidden" name="token" value="<?=$token?>">
 <input type="submit" value="送信する" class = "registrate">

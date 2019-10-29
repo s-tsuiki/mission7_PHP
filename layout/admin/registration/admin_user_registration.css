@@ -1,0 +1,43 @@
+@charset "utf-8";
+
+.headline{
+	height: 200px;
+}
+
+.title{
+	float: right;
+	font-size: 50px;
+	padding-right: 50px;
+	text-decoration: blink;
+	text-shadow: 2px;
+	font-family: cursive;
+}
+
+.logo{
+	width: 300px;
+	margin-left: 30px;
+}
+
+.link{
+	float: right;
+	position: absolute;
+	top: 150px;
+	right: 50px;
+}
+
+.table{
+	background-color: #FFF0F5;
+	padding: 20px;
+	position: absolute;
+	align-self: center;
+	width: 100%;
+}
+
+strong {
+	color: #FF0000;
+}
+
+ul {
+	text-align: center;
+	list-style: none;
+}

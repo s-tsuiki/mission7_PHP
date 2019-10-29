@@ -91,24 +91,29 @@ require '../tools/database_connect/database_connect.php';
 <head>
   <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
   <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
-  <link rel="stylesheet" type="text/css" href="../layout/admin_login_check.css">
-  <title>管理者処理画面</title>
+  <link rel="stylesheet" type="text/css" href="../layout/admin/admin_login_check.css">
+  <title>管理者ログインチェック</title>
 </head>
 <body>
 <?php if(count($errors) > 0):?>
 
-<div class="error_area">
+<div class = "head_line">
 
-<h1>おすきにどうぞ！</h1>
-<h1>管理者</h1>
+<img src="../images/logo.jpg" class="logo">
+<p class="title">ログインチェック</p>
 
+</div>
+
+<div class="message_area">
 <?php
 foreach($errors as $value){
-	echo "<p><strong>".$value."</strong></p>";
+	echo "<p align='center'><strong>".$value."</strong></p>";
 }
 ?>
 
-<input type="button" value="戻る" onClick="history.back()" class = "back">
+<input type="button" value="戻る" onClick="history.back()" style = "width:100px; height: 30px"/>
+
+</div>
 
 </div>
 

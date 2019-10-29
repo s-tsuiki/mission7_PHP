@@ -77,42 +77,61 @@ require '../../tools/database_connect/database_connect.php';
 <head>
   <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
   <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
-  <link rel="stylesheet" type="text/css" href="../layout/user_check.css">
-  <title>管理者登録確認画面</title>
+  <link rel="stylesheet" type="text/css" href="../../layout/admin/registration/admin_user_check.css">
+  <title>管理者登録確認</title>
 </head>
 <body>
-<div class="confirm_area">
+<div class = "head_line">
 
-<h1>おすきにどうぞ！</h1>
+<img src="../../images/logo.jpg" class="logo">
  
 <?php if (count($errors) === 0): ?>
  
-<h2>管理者登録確認</h2>
+<p class="title">管理者登録確認</p>
+</div>
 
+<div class="table">
 <form action="admin_user_registration_complete.php" method="post" class="form">
+<table align="center">
  
-<p>メールアドレス：</p>
-<p><?=htmlspecialchars($_SESSION['mail'], ENT_QUOTES, 'UTF-8')?></p>
-<p>ユーザー名：</p>
-<p><?=htmlspecialchars($_SESSION['user'], ENT_QUOTES, 'UTF-8')?></p>
-<p>管理者パスワード：</p>
-<p><?=$admin_password_hide?></p>
+<tr>
+<td>メールアドレス:</td>
+<td><?=htmlspecialchars($_SESSION['mail'], ENT_QUOTES, 'UTF-8')?></td>
+</tr>
+
+<tr>
+<td>ユーザー名:</td>
+<td><?=htmlspecialchars($_SESSION['user'], ENT_QUOTES, 'UTF-8')?></td>
+</tr>
+
+<tr>
+<td>管理者パスワード:</td>
+<td><?=$admin_password_hide?></td>
+</tr>
  
-<input type="button" value="戻る" onClick="history.back()" class ="back">
 <input type="hidden" name="token" value="<?=$_POST['token']?>">
-<input type="submit" value="登録する" class = "registrate">
+
+<tr>
+<td><input type="button" value="戻る" onClick="history.back()" align="center" style = "width:100px; height: 30px"/></td>
+<td><input type="submit" value="登録する" align="center" style = "width:100px; height: 30px"/></td>
+</tr>
  
+</table>
 </form>
  
 <?php elseif(count($errors) > 0): ?>
  
+</div>
+<div class="table">
 <?php
 	foreach($errors as $value){
-		echo "<p><strong>".$value."</strong></p>";
+		echo "<p align='center'><strong>".$value."</strong></p>";
 	}
 ?>
  
-<input type="button" value="戻る" onClick="history.back()" class = "back">
+<div class = "back">
+<input type="button" value="戻る" onClick="history.back()" style = "width:100px; height: 30px"/>
+</div>
  
 <?php endif; ?>
 

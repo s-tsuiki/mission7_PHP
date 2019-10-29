@@ -124,23 +124,32 @@ require '../tools/database_connect/database_connect.php';
 <head>
   <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
   <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
-  <link rel="stylesheet" type="text/css" href="../layout/admin_post.css">
+  <link rel="stylesheet" type="text/css" href="../layout/admin/admin_post.css">
   <title><?=htmlspecialchars($user, ENT_QUOTES, 'UTF-8')?>さんの投稿・編集ページ</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 <body>
-<div class = "form">
-<h2>入力フォーム</h2>
+<div class = "head_line">
+
+<img src="../images/logo.jpg" class="logo">
+<p class="title">投稿・編集ページ</p>
+
+</div>
+
+<div class="table">
+
 <p>コメントを入力してください。</p>
 <p>管理者権限で新規投稿、またはすべてのユーザーの投稿の編集ができます。</p>
 <p>アップロードする画像や動画の容量は、<strong>2MBまで</strong>です。</p>
-<p>投稿できるファイル形式は、「.jpg」、「.png」、「.jpeg」、「.gif」、「.mp4」の5つです。</p>
+<p>投稿できるファイル形式は、<strong>「.jpg」、「.png」、「.jpeg」、「.gif」、「.mp4」の5つ</strong>です。</p>
+
 <form method = "post" action = "admin_mypage.php" enctype="multipart/form-data">
+<table align="center">
+
  <input type = "hidden" name = "user" value = <?php if(!empty($user)){echo "'$user'";}?> >
- <div class = "item">
-   <lavel for="upfile">画像や動画:</lavel><br>
-   <?php 
-	if(!empty($num)){
+
+ <?php 
+	if(!empty($filename)){
 		$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
 		$imgext = ['jpg','png','jpeg','gif'];
 		if(in_array($ext,$imgext)){
@@ -150,9 +159,15 @@ require '../tools/database_connect/database_connect.php';
 		}
 		//echo "<img src='../upload/".$filename."'>"."<br>";
 	}
-   ?>
-   <input type='file' name='upfile' style = 'margin: 30px; height: 30px; width: 300px'><br>
-   <lavel for="genre">ジャンル：</lavel>
+ ?>
+ <tr>
+   <td><lavel for="upfile">画像や動画:</lavel></td>
+   <td><input type='file' name='upfile' style = 'margin: 30px; height: 30px; width: 300px'></td>
+ </tr>
+
+ <tr>
+   <td><lavel for="genre">ジャンル：</lavel></td>
+   <td>
    <select name="genre" id="genre">
      <option value="食べ物">食べ物</option>
      <option value="芸能人">芸能人</option>
@@ -164,7 +179,10 @@ require '../tools/database_connect/database_connect.php';
      <option value="スポーツ">スポーツ</option>
      <option value="機械">機械</option>
      <option value="その他">その他</option>
-   </select><br>
+   </select>
+   </td>
+ </tr>
+
    <script type="text/javascript">
      var genre = <?php if(!empty($genre)){echo $genre;}?>;
      document.write(genre);
@@ -172,17 +190,30 @@ require '../tools/database_connect/database_connect.php';
        document.getElementById('genre').value = genre;
      }
    </script>
-   <lavel for="comment">コメント:</lavel><br>
-   <textarea name="comment" cols="40" rows="5"><?php if(!empty($comment)){echo htmlspecialchars($comment, ENT_QUOTES, 'UTF-8');}?></textarea>
- </div>
- <input type = "submit" value = "送信" class = "submit">
+
+ <tr>
+   <td><lavel for="comment">コメント:</lavel></td>
+   <td><textarea name="comment" cols="40" rows="5"><?php if(!empty($comment)){echo htmlspecialchars($comment, ENT_QUOTES, 'UTF-8');}?></textarea></td>
+ </tr>
+
+ <tr align="center">
+   <td colspan="2"><input type = "submit" value = "送信" style = "width:100px; height: 30px"/></td>
+ </tr>
+
  <input type = "hidden" name = "e_number" value = <?php if(!empty($e_number)){echo $e_number;}?> >
  <input type = "hidden" name = "token" value = <?=htmlspecialchars($token, ENT_QUOTES, 'UTF-8')?> >
+</table>
 </form>
 
+<br>
+
 <form method = "post" action = "admin_mypage.php">
+<table align="center">
 <input type = "hidden" name = "token" value = <?=htmlspecialchars($token, ENT_QUOTES, 'UTF-8')?> >
-<input type="submit" value="戻る" class = "back">
+<tr align="center">
+<td colspan="2"><input type="submit" value="戻る" style = "width:100px; height: 30px"/></td>
+</tr>
+</table>
 </form>
 
 </div>
