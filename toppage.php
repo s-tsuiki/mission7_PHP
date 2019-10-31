@@ -73,29 +73,27 @@ span{
 .pic img{
     width: 100%;
     display: block;
-
+}
+.pic video {
+    display: block;
+    width: 100%;
+}
 </style>
-
 	</head>
 <body>
-
 <div class="headline">
 <img src="images/logo.jpg" class="logo"><p class="title" a href = "toppage.php">おすきにどうぞ</p>
 <?php 
 	session_start();
-	if(isset($_SESSION['username'])){
+	if(isset($_SESSION['user'])){
 	echo '<a href = "../mission7_PHP/login/mypage.php" class="link">マイページ</a>';
 	}else{
 	echo 	'<a href = "../mission7_PHP/login/mission_7_login.php" class="link">新規登録・ログイン</a>';
 }?>
 </div>
-
 	<p>すきを語らう憩いの場です！<br>あなたの「好き」を熱く語りましょう
-
 	</p>
-
 <?php
-
 require 'tools/database_connect/database_connect.php';
 $pdo = db_connect();
 $sql = "CREATE TABLE IF NOT EXISTS cmt_list (
@@ -106,11 +104,8 @@ comment TEXT,
 filename VARCHAR(128),
 genre VARCHAR(128) NOT NULL
 )";
-
-//ジャンルの項目を追加
+//シ゛ャンルの項目を追加
 $stmt = $pdo->query($sql);
-
-
 	?>
 <form id = "submit_form" action = "toppage.php" method = "post">
 <span>ジャンル：</span>
@@ -128,294 +123,131 @@ $stmt = $pdo->query($sql);
 <option value="機械">機械</option>
 <option value="その他">その他</option>
 </select>
-
 </form>
-
 <script type="text/javascript">
 	$(function(){
 		$("#submit_select").change(function(){
 			$("#submit_form").submit();
 		});
 	});
-
 </script>
-
 <section>
 <?php
 
-if(empty($_POST["toukou"])){//
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename,genre FROM cmt_list";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
+	if(empty($_POST["toukou"])){
+		echo "<div class='panel'>";
+		$sql = "SELECT * FROM cmt_list";
+		$stmt = $pdo->query($sql);
+		$results = $stmt->fetchAll();
+		foreach ($results as $row){
+    			//$rowの中にはテーブルのカラム名が入る
+			$num = $row['num'];
+			$comment = $row['comment'];
+			$filename = $row['filename'];
+			$genre = $row['genre'];
+			$username = $row['user'];
+			echo "<div class='box'>";
+			//画像または動画を表示
+			if(!empty($filename)){
+				$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+				$imgext = ['jpg','png','jpeg','gif'];
+				if(in_array($ext,$imgext)){
+					echo "<div class='pic' id='pic'><img src='./upload/".$filename."'></div>";
+    				}else{
+					echo "<div class='pic' id='pic'><video width='440px' src='./upload/".$filename."' controls></video></div>";
+				}
+			}else{
+				echo "<br><br><br><br><br>";
+			}
 
-    //$rowの中にはテーブルのカラム名が入る
+			echo "<br>";
+			
+    			echo $comment."<br>";
+			echo "ジャンル：".$genre."<br>";
+			echo "by. ".$username."<br>";
+			echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
+		}
+		echo "</div>";
+	}else{
+		if($_POST["toukou"]=="全て"){
+			echo "<div class='panel'>";
+			$sql = "SELECT * FROM cmt_list";
+			$stmt = $pdo->query($sql);
+			$results = $stmt->fetchAll();
+			foreach ($results as $row){
+    				//$rowの中にはテーブルのカラム名が入る
+				$num = $row['num'];
+				$comment = $row['comment'];
+				$filename = $row['filename'];
+				$genre = $row['genre'];
+				$username = $row['user'];
+				echo "<div class='box'>";
+    				//画像または動画を表示
+				if(!empty($filename)){
+					$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+					$imgext = ['jpg','png','jpeg','gif'];
+					if(in_array($ext,$imgext)){
+						echo "<div class='pic' id='pic'><img src='./upload/".$filename."'></div>";
+    					}else{
+						echo "<div class='pic' id='pic'><video width='440px' src='./upload/".$filename."' controls></video></div>";
+					}
+				}else{
+					echo "<br><br><br><br><br>";
+				}
 
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$genre = $row['genre'];
-	$username = $row['user'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username."jungle".$genre;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
+				echo "<br>";
+				
+    				echo $comment."<br>";
+				echo "ジャンル：".$genre."<br>";
+				echo "by. ".$username."<br>";
+				echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
+			}
+			echo "</div>";
+		}
+		else{
+			$genre = $_POST["toukou"];
+			
+			echo "<div class='panel'>";
+			$sql = "SELECT * FROM cmt_list WHERE genre=:genre";
+			$stmt = $pdo->prepare($sql);
+			$stmt->bindParam(':genre', $genre, PDO::PARAM_STR);
+			$stmt->execute();
 
-}
-	echo "</div>";
-}
+			$results = $stmt->fetchAll();
+			foreach ($results as $row){
+    				//$rowの中にはテーブルのカラム名が入る
+				$num = $row['num'];
+				$comment = $row['comment'];
+				$filename = $row['filename'];
+				$username = $row['user'];
+				echo "<div class='box'>";
+				//画像または動画を表示
+				if(!empty($filename)){
+					$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+					$imgext = ['jpg','png','jpeg','gif'];
+					if(in_array($ext,$imgext)){
+						echo "<div class='pic' id='pic'><img src='./upload/".$filename."'></div>";
+    					}else{
+						echo "<div class='pic' id='pic'><video width='440px' src='./upload/".$filename."' controls></video></div>";
+					}
+				}else{
+					echo "<br><br><br><br><br>";
+				}
 
-else{//選択したジャンルを表示
+				echo "<br>";
 
-if($_POST["toukou"]=="全て"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename,genre FROM cmt_list";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
+    				echo $comment."<br>";
+				echo "ジャンル：".$genre."<br>";
+				echo "by. ".$username."<br>";
+				echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
+			}
+			echo "</div>";
+		}
+	}
 
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$genre = $row['genre'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username."jungle".$genre;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-	echo "</div>";
-}
-
-if($_POST["toukou"]=="食べ物"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='1'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-		
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="芸能人"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='2'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="ネット有名人"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='3'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="アニメ"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='4'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="映画"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='5'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="音楽"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='6'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="舞台"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='7'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="スポーツ"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='8'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username;
-    echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="機械"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='9'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-		
-	echo "<div class='box'>";
- 	echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-	echo $comment."<br>by. ".$username;
-	echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-if($_POST["toukou"]=="その他"){
-	echo "<div class='panel'>";
-	$sql = "SELECT user,comment,filename FROM cmt_list WHERE genre='10'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-
-    //$rowの中にはテーブルのカラム名が入る
-
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$username = $row['user'];
-
-	echo "<div class='box'>";
-        echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-        echo $comment."<br>by. ".$username;
-        echo "<form action='userpage.php' method='POST'><input type='hidden' name='username' value=".$username."><input name='submit' type='submit' value='ユーザーページへ' style='float:right;'></form></div>";
-
-}
-echo "</div>";
-}
-
-}
-
-	?>
-
+	//データベース接続切断
+	$pdo = null;
+?>
 	</section>
-
 	</body>
-
 </html>	

@@ -530,7 +530,9 @@ require '../tools/database_connect/database_connect.php';
 
 			echo "<br>";
 			
-    			echo $comment."<br>by. ".$username."jungle".$genre."</div>";
+    			echo $comment."<br>";
+			echo "ジャンル：".$genre."<br>";
+			echo "by. ".$username."</div>";
 		}
 		echo "</div>";
 	}else{
@@ -578,7 +580,9 @@ require '../tools/database_connect/database_connect.php';
 
 				echo "<br>";
 				
-    				echo $comment."<br>by. ".$username."jungle".$genre."</div>";
+    				echo $comment."<br>";
+				echo "ジャンル：".$genre."<br>";
+				echo "by. ".$username."</div>";
 			}
 			echo "</div>";
 		}
@@ -630,7 +634,9 @@ require '../tools/database_connect/database_connect.php';
 
 				echo "<br>";
 
-    				echo $comment."<br>by. ".$username."jungle".$genre."</div>";
+    				echo $comment."<br>";
+				echo "ジャンル：".$genre."<br>";
+				echo "by. ".$username."</div>";
 			}
 			echo "</div>";
 		}

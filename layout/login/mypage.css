@@ -1,0 +1,93 @@
+@charset "utf-8";
+
+.headline{
+	height: 200px;
+}
+
+.title{
+	float: right;
+	font-size: 50px;
+	padding-right: 50px;
+	text-decoration: blink;
+	text-shadow: 2px;
+	font-family: cursive;
+}
+
+.logo{
+	width: 300px;
+	margin-left: 30px;
+}
+
+.link{
+	float: right;
+	position: absolute;
+	top: 150px;
+	right: 50px;
+}
+
+.table{
+	background-color: #FFF0F5;
+	padding: 20px;
+	position: absolute;
+	align-self: center;
+	text-align: center;
+	width: 100%;
+}
+
+.panel{
+	margin-left: 20px;
+	column-count: 4;
+	column-width: 270px;
+	column-gap: 20px;
+}
+.box {
+    float: left;
+    width: 250px;
+    height: 300px;
+    padding: 10px;
+    margin: 10px 5px 5px;
+    -moz-page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    break-inside: avoid;
+    background: white;
+    box-sizing: border-box;
+    overflow: auto;
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+}
+.pic{
+	height: 250px;
+	width: 230px;
+	overflow: hidden;
+}
+.pic img{
+    width: 100%;
+    display: block;
+}
+.pic video {
+    display: block;
+    width: 100%;
+}
+
+.toukou {
+	position: fixed;
+	height: 80px;
+	width: 80px;
+	border: 0;
+	font-size: 2em;
+	border-radius: 50%;
+	right: 5%;
+	bottom: 10%;
+	background-color: #00FF00;
+	color: #FFFFFF;
+	/*padding: 1em;*/
+}
+
+.button {
+	display: inline-block;
+}
+
+strong {
+	color: #FF0000;
+}

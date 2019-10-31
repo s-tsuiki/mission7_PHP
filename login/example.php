@@ -6,6 +6,18 @@
 	//データベースに接続する際は、これを入れてください。
 	$pdo = db_connect();
 	
+	  //コメント用のテーブル
+ 	$sql = "CREATE TABLE IF NOT EXISTS cmt_list"
+ 	."(" 
+	."num INT AUTO_INCREMENT PRIMARY KEY,"
+	."id INT NOT NULL,"
+ 	."user VARCHAR(50) NOT NULL,"
+	."comment TEXT,"
+	."filename VARCHAR(128)," 
+	."genre VARCHAR(128) NOT NULL"   //ジャンルの項目を追加 
+	.");"; 
+	$stmt = $pdo->query($sql);
+
 	//データベース接続切断
 	$pdo = null;
 

@@ -71,7 +71,7 @@ require '../tools/database_connect/database_connect.php';
 
 	//エラーが無ければセッションに登録し、マイページに飛ぶ
 	if(count($errors) === 0){
-		$_SESSION['USERID'] = $user;
+		$_SESSION['user'] = $user;
 		$_SESSION['password'] = $password;
 
 		//POSTデータを保持しながら、ログインページに飛ぶ
@@ -86,7 +86,7 @@ require '../tools/database_connect/database_connect.php';
   <meta name="viewport" content="width=320, height=480, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes"><!-- for smartphone. ここは一旦、いじらなくてOKです。 -->
   <meta charset="utf-8"><!-- 文字コード指定。ここはこのままで。 -->
   <link rel="stylesheet" type="text/css" href="../layout/login/mission_7_login_check.css">
-  <title>ユーザー処理画面</title>
+  <title>ログインチェック</title>
 </head>
 <body>
 <?php if(count($errors) > 0):?>

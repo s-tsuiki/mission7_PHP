@@ -75,7 +75,11 @@ span{
 .pic img{
     width: 100%;
     display: block;
-
+}
+.pic video {
+    display: block;
+    width: 100%;
+}
 </style>
 
 </head>
@@ -113,219 +117,126 @@ span{
  });
 </script>
 <?php
- require 'tools/database_connect/database_connect.php';
- $pdo = db_connect();
+require 'tools/database_connect/database_connect.php';
+$pdo = db_connect();
 
+	if(empty($_POST["toukou"])){
+		echo "<div class='panel'>";
+		$sql = "SELECT * FROM cmt_list WHERE user=:user";
+		$stmt = $pdo->prepare($sql);
+		$stmt->bindParam(':user', $username, PDO::PARAM_STR);
+		$stmt->execute();
 
-if(empty($_POST["toukou"])){
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename,genre FROM cmt_list WHERE user='$username'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$genre = $row['genre'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username."jungle".$genre."</div>";
+		$results = $stmt->fetchAll();
+		foreach ($results as $row){
+    			//$rowの中にはテーブルのカラム名が入る
+			$num = $row['num'];
+			$comment = $row['comment'];
+			$filename = $row['filename'];
+			$genre = $row['genre'];
+			$username = $row['user'];
+			echo "<div class='box'>";
+			//画像または動画を表示
+			if(!empty($filename)){
+				$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+				$imgext = ['jpg','png','jpeg','gif'];
+				if(in_array($ext,$imgext)){
+					echo "<div class='pic' id='pic'><img src='./upload/".$filename."'></div>";
+    				}else{
+					echo "<div class='pic' id='pic'><video width='440px' src='./upload/".$filename."' controls></video></div>";
+				}
+			}else{
+				echo "<br><br><br><br><br>";
+			}
 
-}
-	echo "</div>";
-}
-else{
+			echo "<br>";
+			
+    			echo $comment."<br>";
+			echo "ジャンル：".$genre."<br>";
+			echo "by. ".$username."</div>";
+		}
+		echo "</div>";
+	}else{
+		if($_POST["toukou"]=="全て"){
+			echo "<div class='panel'>";
+			$sql = "SELECT * FROM cmt_list WHERE user=:user";
+			$stmt = $pdo->prepare($sql);
+			$stmt->bindParam(':user', $username, PDO::PARAM_STR);
+			$stmt->execute();
 
-if($_POST["toukou"]=="全て"){
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename,genre FROM cmt_list WHERE user='$username'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	$genre = $row['genre'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' class='cut'></div>";
-    echo $comment."<br>by. ".$username."jungle".$genre."</div>";
+			$results = $stmt->fetchAll();
+			foreach ($results as $row){
+    				//$rowの中にはテーブルのカラム名が入る
+				$num = $row['num'];
+				$comment = $row['comment'];
+				$filename = $row['filename'];
+				$genre = $row['genre'];
+				$username = $row['user'];
+				echo "<div class='box'>";
+    				//画像または動画を表示
+				if(!empty($filename)){
+					$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+					$imgext = ['jpg','png','jpeg','gif'];
+					if(in_array($ext,$imgext)){
+						echo "<div class='pic' id='pic'><img src='./upload/".$filename."'></div>";
+    					}else{
+						echo "<div class='pic' id='pic'><video width='440px' src='./upload/".$filename."' controls></video></div>";
+					}
+				}else{
+					echo "<br><br><br><br><br>";
+				}
 
-}
-	echo "</div>";
-}
-if($_POST["toukou"]=="食べ物"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='1'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
+				echo "<br>";
+				
+    				echo $comment."<br>";
+				echo "ジャンル：".$genre."<br>";
+				echo "by. ".$username."</div>";
+			}
+			echo "</div>";
+		}
+		else{
+			$genre = $_POST["toukou"];
+			
+			echo "<div class='panel'>";
+			$sql = "SELECT * FROM cmt_list WHERE user=:user AND genre=:genre";
+			$stmt = $pdo->prepare($sql);
+			$stmt->bindParam(':user', $username, PDO::PARAM_STR);
+			$stmt->bindParam(':genre', $genre, PDO::PARAM_STR);
+			$stmt->execute();
 
-if($_POST["toukou"]=="芸能人"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='2'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
+			$results = $stmt->fetchAll();
+			foreach ($results as $row){
+    				//$rowの中にはテーブルのカラム名が入る
+				$num = $row['num'];
+				$comment = $row['comment'];
+				$filename = $row['filename'];
+				$username = $row['user'];
+				echo "<div class='box'>";
+				//画像または動画を表示
+				if(!empty($filename)){
+					$ext = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+					$imgext = ['jpg','png','jpeg','gif'];
+					if(in_array($ext,$imgext)){
+						echo "<div class='pic' id='pic'><img src='./upload/".$filename."'></div>";
+    					}else{
+						echo "<div class='pic' id='pic'><video width='440px' src='./upload/".$filename."' controls></video></div>";
+					}
+				}else{
+					echo "<br><br><br><br><br>";
+				}
 
-if($_POST["toukou"]=="ネット有名人"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='3'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' width='200px'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
+				echo "<br>";
 
-if($_POST["toukou"]=="アニメ"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='4'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' width='200px'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
+    				echo $comment."<br>";
+				echo "ジャンル：".$genre."<br>";
+				echo "by. ".$username."</div>";
+			}
+			echo "</div>";
+		}
+	}
 
-
-if($_POST["toukou"]=="映画"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='5'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' width='200px'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
-
-if($_POST["toukou"]=="音楽"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='6'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' width='200px'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
-
-
-if($_POST["toukou"]=="舞台"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='7'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' width='200px'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
-
-if($_POST["toukou"]=="スポーツ"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='8'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' width='200px'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
-
-if($_POST["toukou"]=="機械"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='9'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' width='200px'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
-
-if($_POST["toukou"]=="その他"){
-	echo "<p>".$_POST["toukou"]."</p>";
-	echo "<div class='panel'>";
-	$sql = "SELECT comment,filename FROM cmt_list WHERE user='$username' AND genre='10'";
-	$stmt = $pdo->query($sql);
-	$results = $stmt->fetchAll();
-	foreach ($results as $row){
-    //$rowの中にはテーブルのカラム名が入る
-	$comment = $row['comment'];
-	$filename = $row['filename'];
-	echo "<div class='box'>";
-    echo "<div class='pic' id='pic'><img src='".$filename."' width='200px'></div>";
-    echo $comment."<br>by. ".$username."</div>";
-}
-    echo "</div>";
-}
-
-}
+	//データベース接続切断
+	$pdo = null;
 ?>
 </body>
 </html>
