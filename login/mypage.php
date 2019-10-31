@@ -328,7 +328,7 @@ require '../tools/database_connect/database_connect.php';
 	}
 ?>
 
-//ジャンル選択
+<!--ジャンル選択-->
 <form id = "submit_form" action = "mypage.php" method = "post">
 <select name="toukou" id = "submit_select" onchange = "submit(this.form)">
 <option value="選択してください">選択してください</option>

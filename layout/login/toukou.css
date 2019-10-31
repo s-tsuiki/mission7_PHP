@@ -34,6 +34,18 @@
 	width: 100%;
 }
 
+.pic img {
+	width: 400px;
+  	height: 400px;
+  	object-fit: contain;
+}
+
+.pic video {
+	width: 400px;
+  	height: 400px;
+  	object-fit: contain;
+}
+
 strong {
 	color: #FF0000;
 }
