@@ -15,16 +15,52 @@ XSS, CSRFなど、基本的なセキュリティ対策は実装済み。
 
 ## 内容
 ### トップページ
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/toppage.png" alt="トップページ">
+</div>
 
 ### 会員登録
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/registration.png" alt="登録ページ">
+</div>
 
 ### ログイン
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/login.png" alt="ログインページ">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/mypage.png" alt="マイページ">
+</div>
+
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/logout.png" alt="ログアウトページ">
+</div>
 
 ### 画像・動画の投稿・削除・編集
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/post.png" alt="投稿ページ">
+</div>
+
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/delete.png" alt="削除ページ">
+</div>
+
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/edit.png" alt="編集ページ">
+</div>
 
 ### 管理者機能
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/admin.png" alt="管理者ページ">
+</div>
+
+<div align="center">
+<img src="https://raw.github.com/wiki/s-tsuiki/mission7_PHP/images/admin_edit.png" alt="管理者編集ページ">
+</div>
 
 ## 構成
+ウェブページの本体を各PHPファイル内のHTMLで記述し、デザインを「layout」フォルダ内のCSSで指定しています。  
+サイトのサーバー内の動きを各PHPファイル内のphpの記述部分で指定しています。  
+仮メンバーのリスト、メンバーのリスト、コメントなどはすべてサーバー内のデータベース上で管理しています。  
+管理者メンバーテーブルが別にあります。画像・動画を置くテーブルもあります。
 
 ## 役割
 @hazukyon・・・ハスラー。市場調査、要件定義の⼀部を担う。アイデア提案。トップページとマイページ担当。  
